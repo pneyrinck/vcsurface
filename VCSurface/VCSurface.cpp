@@ -12,6 +12,11 @@ int getKey();
 
 int _tmain(int argc, _TCHAR* argv[])
 {
+	WORD wVersionRequested;
+	WSADATA wsaData;
+	wVersionRequested = MAKEWORD(2, 2);
+	WSAStartup(wVersionRequested, &wsaData);
+
 	struct VControlModule* module = VControlApiSurfaceCreate("utas", "UTAS Surface", 0, false);
 	int index = 0;
 	addModuleControl(module, "record", "Record", index++, kVControlParameterTypeMomentary, kVControlParameterTypeBoolean);
@@ -20,15 +25,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	addModuleControl(module, "memloc1", "Location 1", index++, kVControlParameterTypeMomentary, kVControlParameterTypeBoolean);
 	addModuleControl(module, "memloc2", "Location 2", index++, kVControlParameterTypeMomentary, kVControlParameterTypeBoolean);
 	VControlModulePublish(module);
-	VControlSurfaceServerConnect("192.168.42.96", "",  8080, "/surfaces");
+	VControlSurfaceServerConnect("127.0.0.1", "",  8080, "/surfaces");
 
 
 	while (true)
 	{
+		printf("pressed q to quit\n");
 		int i = getKey();
 		if (i == 81)
 			break;
-		printf("pressed %d\n", i);
 	}
 	system("pause");
 
